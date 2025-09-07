@@ -46,13 +46,12 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
 
       {/* Main Content Container */}
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            {/* Main Content */}
-            <div className="lg:col-span-8 text-center lg:text-right">
-              {/* Logo - Made Bigger */}
-              <div className={`mb-8 flex justify-center lg:justify-end transition-all duration-1000 ${
+            {/* Logo - Left Side */}
+            <div className="lg:col-span-2 flex justify-center lg:justify-start order-2 lg:order-1">
+              <div className={`transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
               }>
                 <div className="w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden shadow-2xl border-2 border-primary/20">
@@ -62,7 +61,10 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
                     className="object-cover object-center !w-[221px] !h-[216px] !max-w-[221px]" />
                 </div>
               </div>
+            </div>
 
+            {/* Main Content - Center */}
+            <div className="lg:col-span-6 text-center order-1 lg:order-2">
               {/* Main Heading - More Professional, Thin, Elegant, Smaller */}
               <h1 className={`text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light mb-6 leading-tight tracking-wide transition-all duration-1000 delay-200 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
@@ -107,8 +109,8 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
               </div>
             </div>
 
-            {/* Portrait Photo */}
-            <div className={`lg:col-span-4 flex justify-center lg:justify-start transition-all duration-1000 delay-800 ${
+            {/* Portrait Photo - Right Side */}
+            <div className={`lg:col-span-4 flex justify-center lg:justify-end transition-all duration-1000 delay-800 order-3 ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`
             }>
               <div className="relative">
