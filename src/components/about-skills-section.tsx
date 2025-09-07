@@ -8,32 +8,32 @@ interface AboutSkillsSectionProps {
 
 export default function AboutSkillsSection({ className }: AboutSkillsSectionProps) {
   const skills = [
-    {
-      title: "AI Systems Integration",
-      description: "Developing and implementing advanced AI solutions for trading systems and market analysis",
-      icon: BrainCog,
-    },
-    {
-      title: "Trading & Algo",
-      description: "Algorithmic trading strategies, market analysis, and quantitative finance expertise",
-      icon: LayoutGrid,
-    },
-    {
-      title: "Web Development",
-      description: "Full-stack development with modern technologies for financial applications",
-      icon: Blocks,
-    },
-    {
-      title: "Naval Experience",
-      description: "Military leadership, strategic planning, and operational excellence in high-pressure environments",
-      icon: Proportions,
-    },
-    {
-      title: "Public Speaking",
-      description: "Presenting complex financial concepts and AI technologies to diverse audiences",
-      icon: Framer,
-    },
-  ];
+  {
+    title: "AI Systems Integration",
+    description: "Developing and implementing advanced AI solutions for trading systems and market analysis",
+    icon: BrainCog
+  },
+  {
+    title: "Trading & Algo",
+    description: "Algorithmic trading strategies, market analysis, and quantitative finance expertise",
+    icon: LayoutGrid
+  },
+  {
+    title: "Web Development",
+    description: "Full-stack development with modern technologies for financial applications",
+    icon: Blocks
+  },
+  {
+    title: "Naval Experience",
+    description: "Military leadership, strategic planning, and operational excellence in high-pressure environments",
+    icon: Proportions
+  },
+  {
+    title: "Public Speaking",
+    description: "Presenting complex financial concepts and AI technologies to diverse audiences",
+    icon: Framer
+  }];
+
 
   return (
     <section className={`py-20 bg-background ${className || ""}`}>
@@ -50,9 +50,9 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50"></div>
               
               <div className="text-right dir-rtl space-y-6">
-                <p className="text-lg text-foreground leading-relaxed">
-                  שמי רועי, בן 21, יזם צעיר עם רקע ייחודי בצבא והים. 
-                  התחלתי את דרכי בטרייד בגיל 16 וצברתי ניסיון רב בשווקים הפיננסיים.
+                <p className="text-lg text-foreground leading-relaxed !whitespace-pre-line">שמי רוי, בן 21, יזם צעיר עם רקע ייחודי בצבא והים. התחלתי את דרכי בטרייד בגיל 17 וצברתי ניסיון רב בשווקים הפיננסיים.
+
+
                 </p>
                 
                 <p className="text-lg text-foreground leading-relaxed">
@@ -105,12 +105,12 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {skills.map((skill, index) => {
               const Icon = skill.icon;
-              
+
               return (
                 <div
                   key={skill.title}
-                  className="group bg-card border border-primary/20 rounded-lg p-8 hover:border-primary/40 transition-all duration-300 relative overflow-hidden"
-                >
+                  className="group bg-card border border-primary/20 rounded-lg p-8 hover:border-primary/40 transition-all duration-300 relative overflow-hidden">
+
                   {/* Golden accent border */}
                   <div className="absolute top-0 left-0 w-0 h-full bg-gradient-to-b from-primary/20 to-primary/5 transition-all duration-500 group-hover:w-1"></div>
                   
@@ -132,12 +132,12 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
                   
                   {/* Subtle hover effect */}
                   <div className="absolute bottom-0 right-0 w-0 h-0 bg-primary/5 transition-all duration-500 group-hover:w-full group-hover:h-full -z-10"></div>
-                </div>
-              );
+                </div>);
+
             })}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
