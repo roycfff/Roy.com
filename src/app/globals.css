@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #000000;
+  --color-foreground: #FFFFFF;
+
+  --color-card: #000000;
+  --color-card-foreground: #FFFFFF;
+
+  --color-popover: #000000;
+  --color-popover-foreground: #FFFFFF;
+
+  --color-primary: #FFD700; /* Gold */
+  --color-primary-foreground: #000000;
+
+  --color-secondary: #212121;
+  --color-secondary-foreground: #E0E0E0;
+
+  --color-muted: #1A1A1A;
+  --color-muted-foreground: #A3A3A3;
+
+  --color-accent: #333333;
+  --color-accent-foreground: #FFD700;
+
+  --color-destructive: #CC0000;
+  --color-destructive-foreground: #FFFFFF;
+
+  --color-border: #404040;
+  --color-input: #404040;
+  --color-ring: #FFD700;
+
+  --color-chart-1: #e67e22;
+  --color-chart-2: #2d8659;
+  --color-chart-3: #1e3a5f;
+  --color-chart-4: #f1c40f;
+  --color-chart-5: #e74c3c;
+
+  --color-sidebar: #000000;
+  --color-sidebar-foreground: #FFD700;
+  --color-sidebar-primary: #FFD700;
+  --color-sidebar-primary-foreground: #000000;
+  --color-sidebar-accent: #212121;
+  --color-sidebar-accent-foreground: #FFD700;
+  --color-sidebar-border: #404040;
+  --color-sidebar-ring: #FFD700;
+
+  --font-heading: 'Playfair Display', serif;
+  --font-sans: 'Roboto', sans-serif;
+
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #404040;
+  }
+}
+
+@layer utilities {
+  body {
+    font-family: var(--font-sans);
+  }
+}
+
+@layer base {
+  :root {
+    --background: #000000;
+    --foreground: #FFFFFF;
+    --card: #000000;
+    --card-foreground: #FFFFFF;
+    --popover: #000000;
+    --popover-foreground: #FFFFFF;
+    --primary: #FFD700;
+    --primary-foreground: #000000;
+    --secondary: #212121;
+    --secondary-foreground: #E0E0E0;
+    --muted: #1A1A1A;
+    --muted-foreground: #A3A3A3;
+    --accent: #333333;
+    --accent-foreground: #FFD700;
+    --destructive: #CC0000;
+    --destructive-foreground: #FFFFFF;
+    --border: #404040;
+    --input: #404040;
+    --ring: #FFD700;
+    --chart-1: #e67e22;
+    --chart-2: #2d8659;
+    --chart-3: #1e3a5f;
+    --chart-4: #f1c40f;
+    --chart-5: #e74c3c;
+    --radius: 0.5rem;
+    --sidebar-background: #000000;
+    --sidebar-foreground: #FFD700;
+    --sidebar-primary: #FFD700;
+    --sidebar-primary-foreground: #000000;
+    --sidebar-accent: #212121;
+    --sidebar-accent-foreground: #FFD700;
+    --sidebar-border: #404040;
+    --sidebar-ring: #FFD700;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--primary);
+  }
+
+  p {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--accent-foreground);
+  }
+
+  .container {
+    margin-inline: auto;
+    padding-inline: 2rem;
+  }
+}
+
+/* Hide Next.js error overlay portal */
+nextjs-portal {
+  display: none !important;
+}
