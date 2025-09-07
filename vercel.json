@@ -6,11 +6,6 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "outputDirectory": ".next",
-  "functions": {
-    "src/app/**/*.{js,ts,tsx}": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "env": {
     "NEXT_TELEMETRY_DISABLED": "1"
   },
