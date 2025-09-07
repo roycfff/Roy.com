@@ -50,19 +50,8 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50"></div>
               
               <div className="text-right dir-rtl space-y-6">
-                <p className="text-lg text-foreground leading-relaxed !whitespace-pre-line">שמי רוי, בן 21, יזם צעיר עם רקע ייחודי בצבא והים. התחלתי את דרכי בטרייד בגיל 17 וצברתי ניסיון רב בשווקים הפיננסיים.
-
-
-                </p>
-                
                 <p className="text-lg text-foreground leading-relaxed">
-                  היום אני מתמחה בפיתוח מערכות AI מתקדמות לטרייד חכם, 
-                  משלב בין הידע הטכני שלי לניסיון הבלעדי מהצבא.
-                </p>
-                
-                <p className="text-lg text-foreground leading-relaxed">
-                  המטרה שלי היא להוביל מהפכה בעולם הפיננסים דרך בינה מלאכותית 
-                  ואלגוריתמים חכמים שיעזרו לאנשים להשיג עצמאות כלכלית.
+                  שמי רוי, בן 21, יזם צעיר עם רקע ייחודי בצבא והים. התחלתי את דרכי בטרייד בגיל 17 וצברתי ניסיון רב בשווקים הפיננסיים. כיום אני מתמחה בפיתוח מערכות בינה מלאכותית מתקדמות ובאלגוריתמים חכמים לטרייד, תוך שילוב הידע הטכני שלי עם הניסיון הייחודי שצברתי בשירות הצבאי. המטרה שלי היא להוביל מהפכה בעולם הפיננסים דרך בינה מלאכותית ואלגוריתמים חכמים שיעזרו לאנשים להשיג עצמאות כלכלית.
                 </p>
               </div>
             </div>
