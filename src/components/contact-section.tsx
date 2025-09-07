@@ -112,8 +112,7 @@ export default function ContactSection() {
                 variant="outline"
                 size="lg"
                 className="border-primary/20 hover:border-primary hover:bg-primary/10 transition-all duration-300"
-                onClick={() => window.open("https://linkedin.com", "_blank")}>
-
+                onClick={() => window.open("https://www.linkedin.com/in/roy-davidi-798493376?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app", "_blank")}>
                 <Linkedin className="w-5 h-5 mr-2" />
                 LinkedIn
               </Button>
