@@ -120,20 +120,26 @@ export default function ContactSection() {
                 variant="outline"
                 size="lg"
                 className="border-primary/20 hover:border-primary hover:bg-primary/10 transition-all duration-300"
-                onClick={() => window.open("https://telegram.org", "_blank")}>
-
-                <Send className="w-5 h-5 mr-2" />
-                Telegram
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-primary/20 hover:border-primary hover:bg-primary/10 transition-all duration-300"
-                onClick={() => window.open("mailto:contact@example.com", "_blank")}>
-
+                onClick={() => window.open("mailto:roydavidi2004@gmail.com", "_blank")}>
                 <Send className="w-5 h-5 mr-2" />
                 Email
               </Button>
+            </div>
+
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-center lg:justify-start gap-3 text-foreground/80">
+                <Phone className="w-5 h-5 text-primary" />
+                <a href="tel:0523570858" className="hover:text-primary transition-colors duration-200">
+                  0523570858
+                </a>
+              </div>
+              <div className="flex items-center justify-center lg:justify-start gap-3 text-foreground/80">
+                <Send className="w-5 h-5 text-primary" />
+                <a href="mailto:roydavidi2004@gmail.com" className="hover:text-primary transition-colors duration-200">
+                  roydavidi2004@gmail.com
+                </a>
+              </div>
             </div>
           </div>
 
