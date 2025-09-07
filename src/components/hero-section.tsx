@@ -59,7 +59,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757169622557-jv63bciea78.jpeg"
                     alt="Roy Davidi Logo - Golden Horse"
-                    className="object-cover object-center w-full h-full" />
+                    className="object-cover object-center !w-[221px] !h-[216px] !max-w-[221px]" />
                 </div>
               </div>
 
