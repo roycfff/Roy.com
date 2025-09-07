@@ -68,10 +68,10 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
               }>
                 <span className="text-primary block mb-2 font-thin tracking-widest" style={{ fontFamily: 'var(--font-sans)', letterSpacing: '0.2em' }}>
-                  רוי דוידי
+                  רוי
                 </span>
                 <span className="text-foreground text-2xl sm:text-3xl lg:text-4xl xl:text-5xl block font-extralight tracking-[0.3em]" style={{ fontFamily: 'var(--font-sans)' }}>
-                  DAVIDI
+                  ROY
                 </span>
               </h1>
 
