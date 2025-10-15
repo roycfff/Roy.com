@@ -3,7 +3,6 @@ import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
-import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Roy Davidi | Fintech & AI Systems Integration Expert",
@@ -52,7 +51,6 @@ export default function RootLayout({
           />
         )}
         {children}
-        <Toaster />
         {isDevelopment && <VisualEditsMessenger />}
       </body>
     </html>
