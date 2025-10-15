@@ -11,7 +11,7 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
   const projects = [
     {
       title: "Trading Strategy Platform",
-      description: "Advanced trading strategies for commodities and assets with systematic approaches and risk management",
+      description: "הפכו את הסמארטפון שלכם לשומר אישי דיגיטלי. מערכת הגנה חכמה עם הקלטת שמע, מעקב מיקום והתראות חירום",
       logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/modern-minimalist-logo-for-web-developme-a62c1619-20251015110814.jpg",
       url: "https://guardme-safe-zone.lovable.app/auth",
       siteName: "GuardMe Safe Zone"
