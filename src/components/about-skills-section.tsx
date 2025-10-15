@@ -1,39 +1,32 @@
 "use client";
 
-import { BrainCog, LayoutGrid, Blocks, Proportions, Framer } from "lucide-react";
+import { TrendingUp, Code, Zap, ExternalLink } from "lucide-react";
 
 interface AboutSkillsSectionProps {
   className?: string;
 }
 
 export default function AboutSkillsSection({ className }: AboutSkillsSectionProps) {
-  const skills = [
-  {
-    title: "AI Systems Integration",
-    description: "Developing and implementing advanced AI solutions for trading systems and market analysis",
-    icon: BrainCog
-  },
-  {
-    title: "Trading & Algo",
-    description: "Algorithmic trading strategies, market analysis, and quantitative finance expertise",
-    icon: LayoutGrid
-  },
-  {
-    title: "Web Development",
-    description: "Full-stack development with modern technologies for financial applications",
-    icon: Blocks
-  },
-  {
-    title: "Naval Experience",
-    description: "Military leadership, strategic planning, and operational excellence in high-pressure environments",
-    icon: Proportions
-  },
-  {
-    title: "Public Speaking",
-    description: "Presenting complex financial concepts and AI technologies to diverse audiences",
-    icon: Framer
-  }];
-
+  const projects = [
+    {
+      title: "Trading Strategy Platform",
+      description: "Advanced trading strategies for commodities and assets with systematic approaches and risk management",
+      icon: TrendingUp,
+      url: "https://your-trading-project.com" // Replace with your real project URL
+    },
+    {
+      title: "Web Development Projects",
+      description: "Modern web applications built with React, Next.js, and cutting-edge technologies using Vibe Coding principles",
+      icon: Code,
+      url: "https://your-web-project.com" // Replace with your real project URL
+    },
+    {
+      title: "Automation Systems",
+      description: "Custom automation tools and workflows that streamline processes and increase efficiency",
+      icon: Zap,
+      url: "https://your-automation-project.com" // Replace with your real project URL
+    }
+  ];
 
   return (
     <section className={`py-20 bg-background ${className || ""}`}>
@@ -85,48 +78,52 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
           </div>
         </div>
 
-        {/* Skills Section */}
+        {/* Projects Section */}
         <div>
           <h2 className="text-4xl md:text-5xl font-heading text-primary mb-12 text-center">
-            Core Expertise
+            My Projects
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {skills.map((skill, index) => {
-              const Icon = skill.icon;
+            {projects.map((project) => {
+              const Icon = project.icon;
 
               return (
-                <div
-                  key={skill.title}
-                  className="group bg-card border border-primary/20 rounded-lg p-8 hover:border-primary/40 transition-all duration-300 relative overflow-hidden">
+                <a
+                  key={project.title}
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-card border border-primary/20 rounded-lg p-8 hover:border-primary/40 transition-all duration-300 relative overflow-hidden block">
 
                   {/* Golden accent border */}
                   <div className="absolute top-0 left-0 w-0 h-full bg-gradient-to-b from-primary/20 to-primary/5 transition-all duration-500 group-hover:w-1"></div>
                   
                   {/* Icon */}
-                  <div className="mb-6">
+                  <div className="mb-6 flex items-center justify-between">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
                       <Icon className="w-6 h-6 text-primary" />
                     </div>
+                    <ExternalLink className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors duration-300" />
                   </div>
                   
                   {/* Content */}
                   <h3 className="text-xl font-heading text-primary mb-4 group-hover:text-primary/90 transition-colors duration-300">
-                    {skill.title}
+                    {project.title}
                   </h3>
                   
                   <p className="text-foreground/80 leading-relaxed group-hover:text-foreground transition-colors duration-300">
-                    {skill.description}
+                    {project.description}
                   </p>
                   
                   {/* Subtle hover effect */}
                   <div className="absolute bottom-0 right-0 w-0 h-0 bg-primary/5 transition-all duration-500 group-hover:w-full group-hover:h-full -z-10"></div>
-                </div>);
-
+                </a>
+              );
             })}
           </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
