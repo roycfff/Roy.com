@@ -74,11 +74,11 @@ export default function EducationVisionSection() {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Education Section */}
           <div className="space-y-8">
-            <div className="text-center lg:text-right">
-              <div className="flex items-center justify-center lg:justify-end gap-3 mb-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-3 mb-4">
                 <GraduationCap className="w-8 h-8 text-primary" />
                 <h2 className="text-4xl font-bold text-primary font-heading">
                   Education
@@ -87,7 +87,7 @@ export default function EducationVisionSection() {
               <div className="text-2xl font-light text-muted-foreground font-heading mb-2">
                 השכלה
               </div>
-              <p className="text-muted-foreground max-w-md mx-auto lg:mx-0 lg:ml-auto">
+              <p className="text-muted-foreground max-w-md mx-auto">
                 Academic foundation and professional development in finance and technology
               </p>
             </div>
@@ -120,17 +120,17 @@ export default function EducationVisionSection() {
 
           {/* Vision & Values Section */}
           <div className="space-y-8">
-            <div className="text-center lg:text-left">
-              <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Lightbulb className="w-8 h-8 text-primary" />
                 <h2 className="text-4xl font-bold text-primary font-heading">
                   Vision & Values
                 </h2>
-                <Lightbulb className="w-8 h-8 text-primary" />
               </div>
               <div className="text-2xl font-light text-muted-foreground font-heading mb-2">
                 חזון וערכים
               </div>
-              <p className="text-muted-foreground max-w-md mx-auto lg:mx-0">
+              <p className="text-muted-foreground max-w-md mx-auto">
                 Core principles driving success in fintech and business leadership
               </p>
             </div>
