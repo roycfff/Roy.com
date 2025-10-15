@@ -73,75 +73,51 @@ const ProjectCard = ({ title, description, icon, technologies, highlights, delay
 export default function PortfolioSection() {
   const projects = [
     {
-      title: "AI Trading Bots",
-      description: "Sophisticated algorithmic trading systems powered by machine learning and advanced market analysis. These bots execute trades with precision, managing risk while maximizing returns across multiple asset classes.",
-      icon: <Bot className="w-6 h-6 text-primary" />,
-      technologies: ["Python", "TensorFlow", "Pandas", "NumPy", "API Integration", "Real-time Analytics"],
+      title: "Trading Strategy Development",
+      description: "Development of trading strategies for commodities and various assets. Focus on technical analysis, risk management, and building systematic approaches to market opportunities.",
+      icon: <TrendingUp className="w-6 h-6 text-primary" />,
+      technologies: ["Technical Analysis", "Risk Management", "Market Research", "Trading Platforms"],
       highlights: [
-        "Achieved 15-25% annual returns with controlled drawdown",
-        "Multi-asset trading across crypto, forex, and equities",
-        "Real-time market sentiment analysis integration",
-        "Advanced risk management with dynamic position sizing"
+        "Developed systematic trading approaches for commodities",
+        "Focus on asset diversification and risk control",
+        "Continuous strategy optimization and backtesting",
+        "Active learning and adaptation to market conditions"
       ]
     },
     {
-      title: "Financial Automation Suite",
-      description: "Comprehensive financial management systems that automate complex processes including portfolio rebalancing, risk assessment, and regulatory compliance across multiple financial instruments.",
-      icon: <TrendingUp className="w-6 h-6 text-primary" />,
-      technologies: ["Python", "SQL", "REST APIs", "Docker", "Kubernetes", "Financial APIs"],
+      title: "Automation Systems",
+      description: "Building practical automation solutions to streamline workflows and improve efficiency. Creating tools that save time and reduce manual repetitive tasks.",
+      icon: <Zap className="w-6 h-6 text-primary" />,
+      technologies: ["Python", "APIs", "Workflow Automation", "Scripting"],
       highlights: [
-        "Reduced manual processing time by 80%",
-        "Automated compliance reporting and audit trails",
-        "Real-time portfolio monitoring and alerts",
-        "Integration with major financial data providers"
+        "Built custom automation tools for various workflows",
+        "Automated repetitive tasks and data processing",
+        "Integration with different platforms and services",
+        "Focus on practical, time-saving solutions"
       ]
     },
     {
       title: "Web Development Projects",
-      description: "Modern, responsive web applications built with cutting-edge technologies. Focus on performance, user experience, and scalable architecture for businesses across various industries.",
+      description: "Creating modern, responsive websites using contemporary technologies. Focus on clean design, good user experience, and functional web applications.",
       icon: <Globe className="w-6 h-6 text-primary" />,
-      technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Node.js", "PostgreSQL"],
+      technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Vibe Coding"],
       highlights: [
-        "Built 20+ production websites with 99.9% uptime",
-        "Optimized Core Web Vitals for superior performance",
-        "Implemented advanced SEO strategies",
-        "Created custom CMS solutions for content management"
+        "Built several web applications with modern frameworks",
+        "Focus on responsive design and user experience",
+        "Clean, maintainable code practices",
+        "Continuous learning and skill development"
       ]
     },
     {
-      title: "Mobile App Development",
-      description: "Native and cross-platform mobile applications focused on fintech solutions, trading platforms, and financial management tools with intuitive user interfaces and robust security.",
+      title: "Media Editing & Production",
+      description: "Professional image and video editing for various projects. Creating visual content with attention to detail and aesthetic quality.",
       icon: <Smartphone className="w-6 h-6 text-primary" />,
-      technologies: ["React Native", "Flutter", "Swift", "Kotlin", "Firebase", "GraphQL"],
+      technologies: ["Video Editing", "Image Editing", "Adobe Suite", "Visual Design"],
       highlights: [
-        "Launched apps with 50,000+ active users",
-        "Implemented biometric authentication and encryption",
-        "Real-time data synchronization across devices",
-        "Published on both App Store and Google Play"
-      ]
-    },
-    {
-      title: "Crypto Investment Management",
-      description: "Strategic cryptocurrency portfolio management with quantitative analysis, DeFi protocol integration, and yield optimization strategies generating consistent positive returns.",
-      icon: <Coins className="w-6 h-6 text-primary" />,
-      technologies: ["Web3.js", "Solidity", "DeFi Protocols", "Blockchain APIs", "Smart Contracts"],
-      highlights: [
-        "Generated 40%+ ROI through strategic DeFi positioning",
-        "Developed custom yield farming strategies",
-        "Built automated liquidity management systems",
-        "Expert in cross-chain arbitrage opportunities"
-      ]
-    },
-    {
-      title: "Data Analytics Platform",
-      description: "Advanced business intelligence and data visualization platform that transforms raw financial data into actionable insights through machine learning and predictive analytics.",
-      icon: <BarChart3 className="w-6 h-6 text-primary" />,
-      technologies: ["Python", "R", "Tableau", "Power BI", "Apache Spark", "Machine Learning"],
-      highlights: [
-        "Processed 10TB+ of financial data daily",
-        "Built predictive models with 85%+ accuracy",
-        "Created real-time dashboard solutions",
-        "Implemented automated anomaly detection systems"
+        "Edited images and videos for different purposes",
+        "Focus on quality and visual storytelling",
+        "Experience with professional editing software",
+        "Creative approach to media production"
       ]
     }
   ];
@@ -157,16 +133,15 @@ export default function PortfolioSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-heading text-primary mb-6">
-            Portfolio Excellence
+            Skills & Projects
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-6" />
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            A showcase of innovative financial technology solutions, trading systems, and development projects 
-            that demonstrate expertise in modern fintech and quantitative finance.
+            A collection of my work in trading, automation, web development, and media production.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <ProjectCard
               key={project.title}
@@ -179,33 +154,19 @@ export default function PortfolioSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true }}
           className="mt-16 text-center"
         >
           <div className="bg-card border border-primary/20 rounded-lg p-8 max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <Zap className="w-6 h-6 text-primary" />
-              <h3 className="text-2xl font-heading text-primary">Ready for Your Next Project?</h3>
+              <Code className="w-6 h-6 text-primary" />
+              <h3 className="text-2xl font-heading text-primary">Let's Work Together</h3>
             </div>
             <p className="text-muted-foreground mb-6 leading-relaxed">
-              Transform your financial operations with cutting-edge technology solutions. 
-              From AI-powered trading systems to comprehensive web platforms, let's build something extraordinary together.
+              Interested in collaborating on trading strategies, automation projects, or web development? 
+              Let's discuss how we can work together.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-accent-foreground">
-              <span className="flex items-center gap-2">
-                <Code className="w-4 h-4" />
-                Custom Development
-              </span>
-              <span className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" />
-                Financial Systems
-              </span>
-              <span className="flex items-center gap-2">
-                <Bot className="w-4 h-4" />
-                AI Integration
-              </span>
-            </div>
           </div>
         </motion.div>
       </div>
