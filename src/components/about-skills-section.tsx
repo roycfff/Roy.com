@@ -17,10 +17,10 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
       siteName: "GuardMe Safe Zone"
     },
     {
-      title: "Web Development Projects",
-      description: "Modern web applications built with React, Next.js, and cutting-edge technologies using Vibe Coding principles",
+      title: "ai match",
+      description: "Discover, compare, and build your perfect AI package with AI Match. Streamline your workflow and boost efficiency with our intelligent recommendation platform.",
       logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/modern-minimalist-logo-for-web-developme-a62c1619-20251015110813.jpg",
-      url: "https://your-web-project.com",
+      url: "https://ai-match-09a2d309.base44.app",
       siteName: "Web Project"
     },
     {
