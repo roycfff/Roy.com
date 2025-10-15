@@ -13,21 +13,44 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
       title: "Trading Strategy Platform",
       description: "Advanced trading strategies for commodities and assets with systematic approaches and risk management",
       logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/professional-minimalist-logo-for-a-tradi-85fcbd3a-20251015110806.jpg",
-      url: "https://guardme-safe-zone.lovable.app/auth" // Replace with your real project URL
+      url: "https://guardme-safe-zone.lovable.app/auth",
+      siteName: "GuardMe Safe Zone"
     },
     {
       title: "Web Development Projects",
       description: "Modern web applications built with React, Next.js, and cutting-edge technologies using Vibe Coding principles",
       logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/modern-minimalist-logo-for-web-developme-a62c1619-20251015110813.jpg",
-      url: "https://your-web-project.com" // Replace with your real project URL
+      url: "https://your-web-project.com",
+      siteName: "Web Project"
     },
     {
       title: "Automation Systems",
       description: "Custom automation tools and workflows that streamline processes and increase efficiency",
       logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/sleek-minimalist-logo-for-automation-sys-f655e448-20251015110823.jpg",
-      url: "https://your-automation-project.com" // Replace with your real project URL
+      url: "https://your-automation-project.com",
+      siteName: "Automation Project"
     }
   ];
+
+  // Helper to get favicon URL
+  const getFaviconUrl = (url: string) => {
+    try {
+      const domain = new URL(url).origin;
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    } catch {
+      return null;
+    }
+  };
+
+  // Helper to get display domain
+  const getDisplayDomain = (url: string) => {
+    try {
+      const urlObj = new URL(url);
+      return urlObj.hostname.replace('www.', '');
+    } catch {
+      return '';
+    }
+  };
 
   return (
     <section className={`py-20 bg-background ${className || ""}`}>
@@ -87,6 +110,9 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => {
+              const faviconUrl = getFaviconUrl(project.url);
+              const displayDomain = getDisplayDomain(project.url);
+              
               return (
                 <a
                   key={project.title}
@@ -117,9 +143,23 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
                     {project.title}
                   </h3>
                   
-                  <p className="text-foreground/80 leading-relaxed group-hover:text-foreground transition-colors duration-300">
+                  <p className="text-foreground/80 leading-relaxed group-hover:text-foreground transition-colors duration-300 mb-4">
                     {project.description}
                   </p>
+                  
+                  {/* Site Badge with Favicon */}
+                  <div className="flex items-center gap-2 mt-auto pt-4 border-t border-primary/10">
+                    {faviconUrl && (
+                      <img
+                        src={faviconUrl}
+                        alt={`${project.siteName} favicon`}
+                        className="w-4 h-4"
+                      />
+                    )}
+                    <span className="text-sm text-primary/70 group-hover:text-primary transition-colors duration-300 font-medium">
+                      {displayDomain}
+                    </span>
+                  </div>
                   
                   {/* Subtle hover effect */}
                   <div className="absolute bottom-0 right-0 w-0 h-0 bg-primary/5 transition-all duration-500 group-hover:w-full group-hover:h-full -z-10"></div>
