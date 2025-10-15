@@ -51,15 +51,15 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
             
             {/* Logo - Left Side */}
             <div className="lg:col-span-2 flex justify-center lg:justify-start order-2 lg:order-1">
-              <div className={`transition-all duration-1000 ${
+              <div className={`transition-all duration-1000 !w-56 !h-full ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
               }>
                 <div className="w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden shadow-2xl border-2 border-primary/20">
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757169622557-jv63bciea78.jpeg"
                     alt="Roy Davidi Logo - Golden Horse"
-                    className="w-full h-full object-cover object-center"
-                  />
+                    className="w-full h-full object-cover object-center" />
+
                 </div>
               </div>
             </div>
