@@ -12,7 +12,7 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
     {
       title: "Trading Strategy Platform",
       description: "Advanced trading strategies for commodities and assets with systematic approaches and risk management",
-      logo: "https://storage.googleapis.com/gpt-engineer-file-uploads/FTWCys7kpxbF4KpABKlCzbKKPzD3/social-images/social-1760528213015-d423050d-3563-459a-963a-1db43952f5f8.jfif",
+      logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/modern-minimalist-logo-for-web-developme-a62c1619-20251015110814.jpg",
       url: "https://guardme-safe-zone.lovable.app/auth",
       siteName: "GuardMe Safe Zone"
     },
