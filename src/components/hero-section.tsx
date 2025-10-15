@@ -49,9 +49,9 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            {/* Logo - Left Side */}
-            <div className="lg:col-span-2 flex justify-center lg:justify-start order-2 lg:order-1">
-              <div className={`transition-all duration-1000 !w-56 !h-full ${
+            {/* Logo - Centered */}
+            <div className="lg:col-span-12 flex justify-center order-1 lg:order-1">
+              <div className={`transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
               }>
                 <div className="w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden shadow-2xl border-2 border-primary/20">
