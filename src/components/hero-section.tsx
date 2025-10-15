@@ -82,11 +82,13 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
               <p className={`text-base sm:text-lg lg:text-xl text-muted-foreground mb-8 leading-relaxed font-light tracking-wide transition-all duration-1000 delay-400 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
               }>
-                <span className="text-primary font-light tracking-wider">Fintech</span>
+                <span className="text-primary font-light tracking-wider">Trader</span>
                 <span className="mx-3 text-primary">•</span>
-                <span className="text-primary font-light tracking-wider">Algo</span>
+                <span className="text-primary font-light tracking-wider">Vibe Coding</span>
                 <span className="mx-3 text-primary">•</span>
-                <span className="text-primary font-light tracking-wider">AI Systems Integration</span>
+                <span className="text-primary font-light tracking-wider">Automation</span>
+                <span className="mx-3 text-primary">•</span>
+                <span className="text-primary font-light tracking-wider">Video/Photo Creator</span>
               </p>
 
               {/* CTA Button */}
