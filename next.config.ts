@@ -36,6 +36,13 @@ const nextConfig: NextConfig = {
   
   // Output configuration for deployment
   output: 'standalone',
+  turbopack: {
+    rules: {
+      "*.{jsx,tsx}": {
+        loaders: [LOADER]
+      }
+    }
+  }
 };
 
 export default nextConfig;
