@@ -40,9 +40,6 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   poweredByHeader: false,
   reactStrictMode: true,
-  
-  // Output configuration for deployment
-  output: 'standalone',
   turbopack: {
     rules: {
       "*.{jsx,tsx}": {
@@ -53,3 +50,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+// Orchids restart: 1760961515870
