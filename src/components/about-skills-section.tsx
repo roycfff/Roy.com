@@ -12,21 +12,21 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
     {
       title: "GuardMe.com",
       description: "הפכו את הסמארטפון שלכם לשומר אישי דיגיטלי. מערכת הגנה חכמה עם הקלטת שמע, מעקב מיקום והתראות חירום",
-      logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/modern-minimalist-logo-for-web-developme-a62c1619-20251015110814.jpg",
+      logo: "https://images.unsplash.com/photo-1549921296-3ecf61bfc0b3?auto=format&fit=crop&w=160&h=160",
       url: "https://guardme-safe-zone.lovable.app/auth",
       siteName: "GuardMe Safe Zone"
     },
     {
       title: "ai match",
       description: "Discover, compare, and build your perfect AI package with AI Match. Streamline your workflow and boost efficiency with our intelligent recommendation platform.",
-      logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/modern-minimalist-logo-for-web-developme-a62c1619-20251015110813.jpg",
+      logo: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=160&h=160",
       url: "https://ai-match-09a2d309.base44.app",
       siteName: "Web Project"
     },
     {
       title: "Automation Systems",
       description: "Custom automation tools and workflows that streamline processes and increase efficiency",
-      logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/sleek-minimalist-logo-for-automation-sys-f655e448-20251015110823.jpg",
+      logo: "https://images.unsplash.com/photo-1580894894511-449526ad8cde?auto=format&fit=crop&w=160&h=160",
       url: 'https://build-n-sparkle.lovable.app/',
       siteName: "Automation Project"
     }
