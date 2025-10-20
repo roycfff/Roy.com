@@ -12,21 +12,21 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
     {
       title: "GuardMe.com",
       description: "הפכו את הסמארטפון שלכם לשומר אישי דיגיטלי. מערכת הגנה חכמה עם הקלטת שמע, מעקב מיקום והתראות חירום",
-      logo: "https://images.unsplash.com/photo-1549921296-3ecf61bfc0b3?auto=format&fit=crop&w=160&h=160",
+      logo: "https://hahacanvas.co.il/wp-content/uploads/2021/11/%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA-%D7%99%D7%A4%D7%95%D7%AA-%D7%9C%D7%94%D7%93%D7%A4%D7%A1%D7%94-4.jpg",
       url: "https://guardme-safe-zone.lovable.app/auth",
       siteName: "GuardMe Safe Zone"
     },
     {
       title: "ai match",
       description: "Discover, compare, and build your perfect AI package with AI Match. Streamline your workflow and boost efficiency with our intelligent recommendation platform.",
-      logo: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=160&h=160",
+      logo: "https://hahacanvas.co.il/wp-content/uploads/2021/11/%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA-%D7%99%D7%A4%D7%95%D7%AA-%D7%9C%D7%94%D7%93%D7%A4%D7%A1%D7%94-11-1200x800.jpg",
       url: "https://ai-match-09a2d309.base44.app",
       siteName: "Web Project"
     },
     {
       title: "Automation Systems",
       description: "Custom automation tools and workflows that streamline processes and increase efficiency",
-      logo: "https://images.unsplash.com/photo-1580894894511-449526ad8cde?auto=format&fit=crop&w=160&h=160",
+      logo: "https://d2u1z1lopyfwlx.cloudfront.net/thumbnails/e9111b70-9952-55fe-9893-578d7da17f3e/44c360af-018f-5caf-b47f-14fa94872454.jpg",
       url: 'https://build-n-sparkle.lovable.app/',
       siteName: "Automation Project"
     }
