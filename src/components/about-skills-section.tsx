@@ -27,7 +27,7 @@ export default function AboutSkillsSection({ className }: AboutSkillsSectionProp
       title: "Automation Systems",
       description: "Custom automation tools and workflows that streamline processes and increase efficiency",
       logo: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/3e6f12c3-af71-4a8e-bdb7-dafeaac12b2a/generated_images/sleek-minimalist-logo-for-automation-sys-f655e448-20251015110823.jpg",
-      url: "https://your-automation-project.com",
+      url: 'https://build-n-sparkle.lovable.app/',
       siteName: "Automation Project"
     }
   ];
