@@ -41,6 +41,8 @@ export function Waves({
         vs: 0,
         a: 0,
         set: false,
+        scrollY: 0,
+        scrollVelocity: 0,
     })
     const pathsRef = useRef<SVGPathElement[]>([])
     const linesRef = useRef<Point[][]>([])  // 替换any为Point[][]
@@ -62,15 +64,14 @@ export function Waves({
         // Bind events
         window.addEventListener('resize', onResize)
         window.addEventListener('mousemove', onMouseMove)
+        window.addEventListener('scroll', onScroll, { passive: true })
         containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
-
-        // Start animation
-        rafRef.current = requestAnimationFrame(tick)
 
         return () => {
             if (rafRef.current) cancelAnimationFrame(rafRef.current)
             window.removeEventListener('resize', onResize)
             window.removeEventListener('mousemove', onMouseMove)
+            window.removeEventListener('scroll', onScroll)
             containerRef.current?.removeEventListener('touchmove', onTouchMove)
         }
     }, [])
@@ -157,6 +158,20 @@ export function Waves({
         updateMousePosition(e.pageX, e.pageY)
     }
 
+    // Scroll handler
+    const onScroll = () => {
+        const mouse = mouseRef.current
+        const currentScrollY = window.scrollY
+        
+        // Calculate scroll velocity
+        const scrollDelta = currentScrollY - mouse.scrollY
+        mouse.scrollVelocity = scrollDelta * 2
+        mouse.scrollY = currentScrollY
+        
+        // Add scroll effect to mouse velocity
+        mouse.vs = Math.min(100, Math.abs(mouse.scrollVelocity) * 0.5)
+    }
+
     // Touch handler
     const onTouchMove = (e: TouchEvent) => {
         e.preventDefault()
@@ -188,7 +203,7 @@ export function Waves({
         }
     }
 
-    // Move points - smoother wave motion
+    // Move points - smoother wave motion with scroll influence
     const movePoints = (time: number) => {
         const { current: lines } = linesRef
         const { current: mouse } = mouseRef
@@ -198,14 +213,15 @@ export function Waves({
 
         lines.forEach((points) => {
             points.forEach((p: Point) => {
-                // Wave movement - reduced amplitude for smoother waves
+                // Wave movement - with scroll influence
+                const scrollInfluence = mouse.scrollVelocity * 0.01
                 const move = noise(
-                    (p.x + time * 0.008) * 0.003,  // Adjusted frequency
-                    (p.y + time * 0.003) * 0.002   // Adjusted frequency
-                ) * 8  // Reduced amplitude for smoother waves
+                    (p.x + time * 0.008 + scrollInfluence) * 0.003,
+                    (p.y + time * 0.003 + scrollInfluence) * 0.002
+                ) * 8
 
-                p.wave.x = Math.cos(move) * 12  // Reduced horizontal amplitude
-                p.wave.y = Math.sin(move) * 6   // Reduced vertical amplitude
+                p.wave.x = Math.cos(move) * 12
+                p.wave.y = Math.sin(move) * 6
 
                 // Mouse effect - smoother response
                 const dx = p.x - mouse.sx
@@ -217,23 +233,29 @@ export function Waves({
                     const s = 1 - d / l
                     const f = Math.cos(d * 0.001) * s
 
-                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035  // Reduced influence
-                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035  // Reduced influence
+                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035
+                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035
                 }
 
-                p.cursor.vx += (0 - p.cursor.x) * 0.01   // Increased restoration force
-                p.cursor.vy += (0 - p.cursor.y) * 0.01   // Increased restoration force
+                // Add scroll influence to cursor movement
+                p.cursor.vy += mouse.scrollVelocity * 0.0005
 
-                p.cursor.vx *= 0.95  // Increased smoothness
-                p.cursor.vy *= 0.95  // Increased smoothness
+                p.cursor.vx += (0 - p.cursor.x) * 0.01
+                p.cursor.vy += (0 - p.cursor.y) * 0.01
+
+                p.cursor.vx *= 0.95
+                p.cursor.vy *= 0.95
 
                 p.cursor.x += p.cursor.vx
                 p.cursor.y += p.cursor.vy
 
-                p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x))  // Limited deformation range
-                p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y))  // Limited deformation range
+                p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x))
+                p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y))
             })
         })
+        
+        // Decay scroll velocity
+        mouse.scrollVelocity *= 0.95
     }
 
     // Get moved point coordinates

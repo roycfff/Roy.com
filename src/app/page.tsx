@@ -3,14 +3,25 @@ import AboutSkillsSection from "@/components/about-skills-section";
 import EducationVisionSection from "@/components/education-vision-section";
 import PortfolioSection from "@/components/portfolio-section";
 import ContactSection from "@/components/contact-section";
+import { Waves } from "@/components/ui/wave-background";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="relative">
-        <HeroSection />
-        
+        {/* Fixed wave background that responds to scroll and mouse */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <Waves 
+            strokeColor="#FFD700" 
+            backgroundColor="transparent"
+            pointerSize={0}
+          />
+        </div>
+
+        {/* Content with higher z-index */}
         <div className="relative z-10">
+          <HeroSection />
+          
           <AboutSkillsSection className="border-t border-primary/10" />
           
           <EducationVisionSection />
