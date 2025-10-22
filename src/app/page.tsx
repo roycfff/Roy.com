@@ -11,9 +11,6 @@ export default function HomePage() {
       <div className="relative">
         {/* Fixed wave background that responds to scroll and mouse */}
 
-        {/* Content with higher z-index */}
-        <div className="relative z-10">
-          <HeroSection />
         <div className="fixed inset-0 z-0 pointer-events-none">
           <Waves 
             strokeColor="#FFD700" 
@@ -21,6 +18,9 @@ export default function HomePage() {
             pointerSize={0}
           />
         </div>
+        {/* Content with higher z-index */}
+        <div className="relative z-10">
+          <HeroSection />
           
           <AboutSkillsSection className="border-t border-primary/10" />
           
