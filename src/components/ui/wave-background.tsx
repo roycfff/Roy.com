@@ -80,8 +80,21 @@ export function Waves({
     const setSize = () => {
         if (!containerRef.current || !svgRef.current) return
 
-        boundingRef.current = containerRef.current.getBoundingClientRect()
-        const { width, height } = boundingRef.current
+        // Use window dimensions to ensure full page coverage
+        const width = window.innerWidth
+        const height = Math.max(window.innerHeight, document.documentElement.scrollHeight)
+
+        boundingRef.current = { 
+            width, 
+            height, 
+            top: 0, 
+            left: 0, 
+            right: width, 
+            bottom: height,
+            x: 0,
+            y: 0,
+            toJSON: () => ({})
+        } as DOMRect
 
         svgRef.current.style.width = `${width}px`
         svgRef.current.style.height = `${height}px`
@@ -102,7 +115,7 @@ export function Waves({
         const yGap = 8
 
         const oWidth = width + 200
-        const oHeight = height + 30
+        const oHeight = height + 200
 
         const totalLines = Math.ceil(oWidth / xGap)
         const totalPoints = Math.ceil(oHeight / yGap)
@@ -133,7 +146,7 @@ export function Waves({
             path.setAttribute('fill', 'none')
             path.setAttribute('stroke', strokeColor)
             path.setAttribute('stroke-width', '1')
-            path.setAttribute('opacity', '0.8')
+            path.setAttribute('opacity', '0.7')
 
             svgRef.current.appendChild(path)
             pathsRef.current.push(path)
@@ -158,11 +171,12 @@ export function Waves({
         const timeDelta = currentTime - mouse.lastScrollTime || 16
         
         const scrollDelta = currentScrollY - mouse.scrollY
-        mouse.scrollVelocity = (scrollDelta / timeDelta) * 100
+        // Reduced scroll velocity calculation for less sensitivity
+        mouse.scrollVelocity = (scrollDelta / timeDelta) * 50
         mouse.scrollY = currentScrollY
         mouse.lastScrollTime = currentTime
         
-        mouse.vs = Math.min(150, Math.abs(mouse.scrollVelocity) * 2)
+        mouse.vs = Math.min(100, Math.abs(mouse.scrollVelocity) * 1.5)
     }
 
     const onTouchMove = (e: TouchEvent) => {
@@ -175,8 +189,8 @@ export function Waves({
         if (!boundingRef.current) return
 
         const mouse = mouseRef.current
-        mouse.x = x - boundingRef.current.left
-        mouse.y = y - boundingRef.current.top + window.scrollY
+        mouse.x = x
+        mouse.y = y + window.scrollY
 
         if (!mouse.set) {
             mouse.sx = mouse.x
@@ -202,47 +216,54 @@ export function Waves({
 
         lines.forEach((points) => {
             points.forEach((p: Point) => {
-                const scrollInfluence = mouse.scrollVelocity * 0.05
-                const scrollOffset = mouse.scrollY * 0.002
+                // Reduced scroll influence for less sensitivity
+                const scrollInfluence = mouse.scrollVelocity * 0.02
+                const scrollOffset = mouse.scrollY * 0.001
                 
+                // Reduced wave amplitude
                 const move = noise(
-                    (p.x + time * 0.008 + scrollOffset) * 0.003,
-                    (p.y + time * 0.003 + scrollOffset) * 0.002
-                ) * (8 + Math.abs(scrollInfluence) * 2)
+                    (p.x + time * 0.006) * 0.003,
+                    (p.y + time * 0.002 + scrollOffset) * 0.002
+                ) * (6 + Math.abs(scrollInfluence) * 1)
 
-                p.wave.x = Math.cos(move + scrollOffset) * (12 + Math.abs(scrollInfluence) * 3)
-                p.wave.y = Math.sin(move + scrollOffset) * (6 + Math.abs(scrollInfluence) * 2) + scrollInfluence * 5
+                // Reduced wave movement
+                p.wave.x = Math.cos(move + scrollOffset) * (8 + Math.abs(scrollInfluence) * 1.5)
+                p.wave.y = Math.sin(move + scrollOffset) * (4 + Math.abs(scrollInfluence) * 1) + scrollInfluence * 3
 
                 const dx = p.x - mouse.sx
                 const dy = p.y - mouse.sy
                 const d = Math.hypot(dx, dy)
-                const l = Math.max(175, mouse.vs)
+                const l = Math.max(150, mouse.vs)
 
                 if (d < l) {
                     const s = 1 - d / l
                     const f = Math.cos(d * 0.001) * s
 
-                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035
-                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035
+                    // Reduced cursor influence
+                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00025
+                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00025
                 }
 
-                p.cursor.vy += mouse.scrollVelocity * 0.002
+                // Reduced scroll velocity influence on cursor
+                p.cursor.vy += mouse.scrollVelocity * 0.001
 
-                p.cursor.vx += (0 - p.cursor.x) * 0.01
-                p.cursor.vy += (0 - p.cursor.y) * 0.01
+                p.cursor.vx += (0 - p.cursor.x) * 0.015
+                p.cursor.vy += (0 - p.cursor.y) * 0.015
 
-                p.cursor.vx *= 0.95
-                p.cursor.vy *= 0.95
+                p.cursor.vx *= 0.96
+                p.cursor.vy *= 0.96
 
                 p.cursor.x += p.cursor.vx
                 p.cursor.y += p.cursor.vy
 
-                p.cursor.x = Math.min(80, Math.max(-80, p.cursor.x))
-                p.cursor.y = Math.min(80, Math.max(-80, p.cursor.y))
+                // Reduced maximum displacement range
+                p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x))
+                p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y))
             })
         })
         
-        mouse.scrollVelocity *= 0.92
+        // Faster decay for smoother feel
+        mouse.scrollVelocity *= 0.94
     }
 
     const moved = (point: Point, withCursorForce = true) => {
@@ -306,7 +327,7 @@ export function Waves({
     return (
         <div
             ref={containerRef}
-            className={`waves-component relative overflow-hidden ${className}`}
+            className={`waves-component ${className}`}
             style={{
                 backgroundColor,
                 position: 'absolute',
@@ -325,6 +346,11 @@ export function Waves({
                 ref={svgRef}
                 className="block w-full h-full js-svg"
                 xmlns="http://www.w3.org/2000/svg"
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                }}
             />
             <div
                 className="pointer-dot"
