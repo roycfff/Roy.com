@@ -24,8 +24,8 @@ interface WavesProps {
 
 export function Waves({
     className = "",
-    strokeColor = "#ffffff",  // White lines
-    backgroundColor = "#000000",  // Black background
+    strokeColor = "#ffffff",
+    backgroundColor = "#000000",
     pointerSize = 0.5
 }: WavesProps) {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -43,10 +43,11 @@ export function Waves({
         set: false,
         scrollY: 0,
         scrollVelocity: 0,
+        lastScrollTime: 0,
     })
     const pathsRef = useRef<SVGPathElement[]>([])
-    const linesRef = useRef<Point[][]>([])  // 替换any为Point[][]
-    const noiseRef = useRef<((x: number, y: number) => number) | null>(null)  // 替换any为具体的函数类型
+    const linesRef = useRef<Point[][]>([])
+    const noiseRef = useRef<((x: number, y: number) => number) | null>(null)
     const rafRef = useRef<number | null>(null)
     const boundingRef = useRef<DOMRect | null>(null)
 
@@ -54,18 +55,18 @@ export function Waves({
     useEffect(() => {
         if (!containerRef.current || !svgRef.current) return
 
-        // Initialize noise generator
         noiseRef.current = createNoise2D()
+        mouseRef.current.scrollY = window.scrollY
 
-        // Initialize size and lines
         setSize()
         setLines()
 
-        // Bind events
         window.addEventListener('resize', onResize)
         window.addEventListener('mousemove', onMouseMove)
         window.addEventListener('scroll', onScroll, { passive: true })
         containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
+
+        rafRef.current = requestAnimationFrame(tick)
 
         return () => {
             if (rafRef.current) cancelAnimationFrame(rafRef.current)
@@ -76,7 +77,6 @@ export function Waves({
         }
     }, [])
 
-    // Set SVG size
     const setSize = () => {
         if (!containerRef.current || !svgRef.current) return
 
@@ -87,22 +87,19 @@ export function Waves({
         svgRef.current.style.height = `${height}px`
     }
 
-    // Setup lines - more points for smoother curves
     const setLines = () => {
         if (!svgRef.current || !boundingRef.current) return
 
         const { width, height } = boundingRef.current
         linesRef.current = []
 
-        // Clear existing paths
         pathsRef.current.forEach(path => {
             path.remove()
         })
         pathsRef.current = []
 
-        // Use smaller spacing to generate more lines and points for smoother results
-        const xGap = 8  // Reduced horizontal spacing
-        const yGap = 8  // Reduced vertical spacing for denser points
+        const xGap = 8
+        const yGap = 8
 
         const oWidth = width + 200
         const oHeight = height + 30
@@ -113,7 +110,6 @@ export function Waves({
         const xStart = (width - xGap * totalLines) / 2
         const yStart = (height - yGap * totalPoints) / 2
 
-        // Create vertical lines
         for (let i = 0; i < totalLines; i++) {
             const points: Point[] = []
 
@@ -128,7 +124,6 @@ export function Waves({
                 points.push(point)
             }
 
-            // Create SVG path
             const path = document.createElementNS(
                 'http://www.w3.org/2000/svg',
                 'path'
@@ -138,48 +133,44 @@ export function Waves({
             path.setAttribute('fill', 'none')
             path.setAttribute('stroke', strokeColor)
             path.setAttribute('stroke-width', '1')
+            path.setAttribute('opacity', '0.8')
 
             svgRef.current.appendChild(path)
             pathsRef.current.push(path)
 
-            // Add points
             linesRef.current.push(points)
         }
     }
 
-    // Resize handler
     const onResize = () => {
         setSize()
         setLines()
     }
 
-    // Mouse handler
     const onMouseMove = (e: MouseEvent) => {
         updateMousePosition(e.pageX, e.pageY)
     }
 
-    // Scroll handler
     const onScroll = () => {
         const mouse = mouseRef.current
         const currentScrollY = window.scrollY
+        const currentTime = Date.now()
+        const timeDelta = currentTime - mouse.lastScrollTime || 16
         
-        // Calculate scroll velocity
         const scrollDelta = currentScrollY - mouse.scrollY
-        mouse.scrollVelocity = scrollDelta * 2
+        mouse.scrollVelocity = (scrollDelta / timeDelta) * 100
         mouse.scrollY = currentScrollY
+        mouse.lastScrollTime = currentTime
         
-        // Add scroll effect to mouse velocity
-        mouse.vs = Math.min(100, Math.abs(mouse.scrollVelocity) * 0.5)
+        mouse.vs = Math.min(150, Math.abs(mouse.scrollVelocity) * 2)
     }
 
-    // Touch handler
     const onTouchMove = (e: TouchEvent) => {
         e.preventDefault()
         const touch = e.touches[0]
         updateMousePosition(touch.clientX, touch.clientY)
     }
 
-    // Update mouse position
     const updateMousePosition = (x: number, y: number) => {
         if (!boundingRef.current) return
 
@@ -196,14 +187,12 @@ export function Waves({
             mouse.set = true
         }
 
-        // Update CSS variables
         if (containerRef.current) {
             containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
             containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
         }
     }
 
-    // Move points - smoother wave motion with scroll influence
     const movePoints = (time: number) => {
         const { current: lines } = linesRef
         const { current: mouse } = mouseRef
@@ -213,17 +202,17 @@ export function Waves({
 
         lines.forEach((points) => {
             points.forEach((p: Point) => {
-                // Wave movement - with scroll influence
-                const scrollInfluence = mouse.scrollVelocity * 0.01
+                const scrollInfluence = mouse.scrollVelocity * 0.05
+                const scrollOffset = mouse.scrollY * 0.002
+                
                 const move = noise(
-                    (p.x + time * 0.008 + scrollInfluence) * 0.003,
-                    (p.y + time * 0.003 + scrollInfluence) * 0.002
-                ) * 8
+                    (p.x + time * 0.008 + scrollOffset) * 0.003,
+                    (p.y + time * 0.003 + scrollOffset) * 0.002
+                ) * (8 + Math.abs(scrollInfluence) * 2)
 
-                p.wave.x = Math.cos(move) * 12
-                p.wave.y = Math.sin(move) * 6
+                p.wave.x = Math.cos(move + scrollOffset) * (12 + Math.abs(scrollInfluence) * 3)
+                p.wave.y = Math.sin(move + scrollOffset) * (6 + Math.abs(scrollInfluence) * 2) + scrollInfluence * 5
 
-                // Mouse effect - smoother response
                 const dx = p.x - mouse.sx
                 const dy = p.y - mouse.sy
                 const d = Math.hypot(dx, dy)
@@ -237,8 +226,7 @@ export function Waves({
                     p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035
                 }
 
-                // Add scroll influence to cursor movement
-                p.cursor.vy += mouse.scrollVelocity * 0.0005
+                p.cursor.vy += mouse.scrollVelocity * 0.002
 
                 p.cursor.vx += (0 - p.cursor.x) * 0.01
                 p.cursor.vy += (0 - p.cursor.y) * 0.01
@@ -249,16 +237,14 @@ export function Waves({
                 p.cursor.x += p.cursor.vx
                 p.cursor.y += p.cursor.vy
 
-                p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x))
-                p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y))
+                p.cursor.x = Math.min(80, Math.max(-80, p.cursor.x))
+                p.cursor.y = Math.min(80, Math.max(-80, p.cursor.y))
             })
         })
         
-        // Decay scroll velocity
-        mouse.scrollVelocity *= 0.95
+        mouse.scrollVelocity *= 0.92
     }
 
-    // Get moved point coordinates
     const moved = (point: Point, withCursorForce = true) => {
         const coords = {
             x: point.x + point.wave.x + (withCursorForce ? point.cursor.x : 0),
@@ -268,7 +254,6 @@ export function Waves({
         return coords
     }
 
-    // Draw lines - using line segments
     const drawLines = () => {
         const { current: lines } = linesRef
         const { current: paths } = pathsRef
@@ -276,11 +261,9 @@ export function Waves({
         lines.forEach((points, lIndex) => {
             if (points.length < 2 || !paths[lIndex]) return;
 
-            // First point
             const firstPoint = moved(points[0], false)
             let d = `M ${firstPoint.x} ${firstPoint.y}`
 
-            // Connect points with lines
             for (let i = 1; i < points.length; i++) {
                 const current = moved(points[i])
                 d += `L ${current.x} ${current.y}`
@@ -290,15 +273,12 @@ export function Waves({
         })
     }
 
-    // Animation logic
     const tick = (time: number) => {
         const { current: mouse } = mouseRef
 
-        // Smooth mouse movement
         mouse.sx += (mouse.x - mouse.sx) * 0.1
         mouse.sy += (mouse.y - mouse.sy) * 0.1
 
-        // Mouse velocity
         const dx = mouse.x - mouse.lx
         const dy = mouse.y - mouse.ly
         const d = Math.hypot(dx, dy)
@@ -307,14 +287,11 @@ export function Waves({
         mouse.vs += (d - mouse.vs) * 0.1
         mouse.vs = Math.min(100, mouse.vs)
 
-        // Previous mouse position
         mouse.lx = mouse.x
         mouse.ly = mouse.y
 
-        // Mouse angle
         mouse.a = Math.atan2(dy, dx)
 
-        // Animation
         if (containerRef.current) {
             containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
             containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
@@ -361,6 +338,7 @@ export function Waves({
                     borderRadius: '50%',
                     transform: 'translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)',
                     willChange: 'transform',
+                    display: pointerSize > 0 ? 'block' : 'none',
                 }}
             />
         </div>
