@@ -19,7 +19,7 @@ export default function HomePage() {
           />
         </div>
         {/* Content with higher z-index */}
-        <div className="relative ">
+        <div className="relative z-10">
           <HeroSection />
           
           <AboutSkillsSection className="border-t border-primary/10" />
