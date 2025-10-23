@@ -3,7 +3,7 @@ import AboutSkillsSection from "@/components/about-skills-section";
 import EducationVisionSection from "@/components/education-vision-section";
 import PortfolioSection from "@/components/portfolio-section";
 import ContactSection from "@/components/contact-section";
-import { Waves } from "@/components/ui/wave-background";
+import { Wave } from "@/components/ui/wave-background";
 
 export default function HomePage() {
   return (
@@ -14,11 +14,7 @@ export default function HomePage() {
         <div className="relative z-10">
         <div>
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <Waves 
-            strokeColor="#FFD700" 
-            backgroundColor="transparent"
-            pointerSize={0}
-          />
+          <Wave />
         </div>
         
           <HeroSection />
