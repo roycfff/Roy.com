@@ -8,10 +8,9 @@ import { Waves } from "@/components/ui/wave-background";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
-      <div className="relative">
-        {/* Fixed wave background that responds to scroll and mouse */}
-
-        <div className="fixed inset-0 z-0 pointer-events-none">
+      <div className="relative min-h-screen">
+        {/* Wave background that covers entire page */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <Waves 
             strokeColor="#FFD700" 
             backgroundColor="transparent"

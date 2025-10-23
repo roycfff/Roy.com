@@ -80,9 +80,9 @@ export function Waves({
     const setSize = () => {
         if (!containerRef.current || !svgRef.current) return
 
-        // Use window dimensions for fixed positioning
-        const width = window.innerWidth
-        const height = window.innerHeight
+        // Get full page dimensions
+        const width = Math.max(document.documentElement.scrollWidth, window.innerWidth)
+        const height = Math.max(document.documentElement.scrollHeight, window.innerHeight, document.body.scrollHeight)
 
         boundingRef.current = { 
             width, 
@@ -111,8 +111,8 @@ export function Waves({
         })
         pathsRef.current = []
 
-        const xGap = 8
-        const yGap = 8
+        const xGap = 10
+        const yGap = 10
 
         const oWidth = width + 200
         const oHeight = height + 200
@@ -146,7 +146,7 @@ export function Waves({
             path.setAttribute('fill', 'none')
             path.setAttribute('stroke', strokeColor)
             path.setAttribute('stroke-width', '1')
-            path.setAttribute('opacity', '0.8')
+            path.setAttribute('opacity', '0.7')
 
             svgRef.current.appendChild(path)
             pathsRef.current.push(path)
@@ -171,18 +171,17 @@ export function Waves({
         const timeDelta = currentTime - mouse.lastScrollTime || 16
         
         const scrollDelta = currentScrollY - mouse.scrollY
-        // Reduced scroll velocity calculation for less sensitivity
-        mouse.scrollVelocity = (scrollDelta / timeDelta) * 50
+        mouse.scrollVelocity = (scrollDelta / timeDelta) * 30
         mouse.scrollY = currentScrollY
         mouse.lastScrollTime = currentTime
         
-        mouse.vs = Math.min(100, Math.abs(mouse.scrollVelocity) * 1.5)
+        mouse.vs = Math.min(80, Math.abs(mouse.scrollVelocity) * 1.2)
     }
 
     const onTouchMove = (e: TouchEvent) => {
         e.preventDefault()
         const touch = e.touches[0]
-        updateMousePosition(touch.clientX, touch.clientY)
+        updateMousePosition(touch.clientX, touch.clientY + window.scrollY)
     }
 
     const updateMousePosition = (x: number, y: number) => {
@@ -216,54 +215,47 @@ export function Waves({
 
         lines.forEach((points) => {
             points.forEach((p: Point) => {
-                // Reduced scroll influence
-                const scrollInfluence = mouse.scrollVelocity * 0.015
-                const scrollOffset = mouse.scrollY * 0.0008
+                const scrollInfluence = mouse.scrollVelocity * 0.01
+                const scrollOffset = mouse.scrollY * 0.0005
                 
-                // Smooth wave motion
                 const move = noise(
-                    (p.x + time * 0.005) * 0.003,
+                    (p.x + time * 0.004) * 0.003,
                     (p.y + time * 0.002 + scrollOffset) * 0.002
-                ) * (5 + Math.abs(scrollInfluence) * 0.8)
+                ) * (4 + Math.abs(scrollInfluence) * 0.5)
 
-                // Gentle wave movement
-                p.wave.x = Math.cos(move + scrollOffset) * (6 + Math.abs(scrollInfluence) * 1)
-                p.wave.y = Math.sin(move + scrollOffset) * (3 + Math.abs(scrollInfluence) * 0.8) + scrollInfluence * 2
+                p.wave.x = Math.cos(move + scrollOffset) * (5 + Math.abs(scrollInfluence) * 0.8)
+                p.wave.y = Math.sin(move + scrollOffset) * (3 + Math.abs(scrollInfluence) * 0.5) + scrollInfluence * 1.5
 
                 const dx = p.x - mouse.sx
                 const dy = p.y - mouse.sy
                 const d = Math.hypot(dx, dy)
-                const l = Math.max(140, mouse.vs)
+                const l = Math.max(120, mouse.vs)
 
                 if (d < l) {
                     const s = 1 - d / l
                     const f = Math.cos(d * 0.001) * s
 
-                    // Very gentle cursor influence
-                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.0002
-                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.0002
+                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00015
+                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00015
                 }
 
-                // Gentle scroll velocity influence
-                p.cursor.vy += mouse.scrollVelocity * 0.0008
+                p.cursor.vy += mouse.scrollVelocity * 0.0006
 
-                p.cursor.vx += (0 - p.cursor.x) * 0.02
-                p.cursor.vy += (0 - p.cursor.y) * 0.02
+                p.cursor.vx += (0 - p.cursor.x) * 0.025
+                p.cursor.vy += (0 - p.cursor.y) * 0.025
 
-                p.cursor.vx *= 0.97
-                p.cursor.vy *= 0.97
+                p.cursor.vx *= 0.96
+                p.cursor.vy *= 0.96
 
                 p.cursor.x += p.cursor.vx
                 p.cursor.y += p.cursor.vy
 
-                // Limited displacement
-                p.cursor.x = Math.min(40, Math.max(-40, p.cursor.x))
-                p.cursor.y = Math.min(40, Math.max(-40, p.cursor.y))
+                p.cursor.x = Math.min(35, Math.max(-35, p.cursor.x))
+                p.cursor.y = Math.min(35, Math.max(-35, p.cursor.y))
             })
         })
         
-        // Smooth decay
-        mouse.scrollVelocity *= 0.95
+        mouse.scrollVelocity *= 0.94
     }
 
     const moved = (point: Point, withCursorForce = true) => {
@@ -330,11 +322,11 @@ export function Waves({
             className={`waves-component ${className}`}
             style={{
                 backgroundColor,
-                position: 'fixed',
+                position: 'absolute',
                 top: 0,
                 left: 0,
-                width: '100vw',
-                height: '100vh',
+                width: '100%',
+                minHeight: '100vh',
                 margin: 0,
                 padding: 0,
                 overflow: 'hidden',
@@ -346,6 +338,11 @@ export function Waves({
                 ref={svgRef}
                 className="block w-full h-full js-svg"
                 xmlns="http://www.w3.org/2000/svg"
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                }}
             />
             <div
                 className="pointer-dot"
