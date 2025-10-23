@@ -11,15 +11,18 @@ export default function HomePage() {
       <div className="relative min-h-screen">
         {/* Wave background that covers entire page */}
         <div className="absolute inset-0 z-0 pointer-events-none">
+        </div>
+        {/* Content with higher z-index */}
+        <div className="relative z-10">
+        <div>
           <Waves 
             strokeColor="#FFD700" 
             backgroundColor="transparent"
             pointerSize={0}
           />
-        </div>
-        {/* Content with higher z-index */}
-        <div className="relative z-10">
+        
           <HeroSection />
+        </div>
           
           <AboutSkillsSection className="border-t border-primary/10" />
           
