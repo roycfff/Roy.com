@@ -1,364 +1,143 @@
-'use client'
-import * as React from 'react'
-import { useEffect, useRef } from 'react'
-import { createNoise2D } from 'simplex-noise'
+"use client"
 
-interface Point {
-    x: number
-    y: number
-    wave: { x: number; y: number }
-    cursor: {
-        x: number
-        y: number
-        vx: number
-        vy: number
+import { useEffect, useRef } from "react"
+import * as THREE from "three"
+
+export function ShaderAnimation() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const sceneRef = useRef<{
+    camera: THREE.Camera
+    scene: THREE.Scene
+    renderer: THREE.WebGLRenderer
+    uniforms: any
+    animationId: number
+  } | null>(null)
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const container = containerRef.current
+
+    // Vertex shader
+    const vertexShader = `
+      void main() {
+        gl_Position = vec4( position, 1.0 );
+      }
+    `
+
+    // Fragment shader
+    const fragmentShader = `
+      #define TWO_PI 6.2831853072
+      #define PI 3.14159265359
+
+      precision highp float;
+      uniform vec2 resolution;
+      uniform float time;
+
+      void main(void) {
+        vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+        float t = time*0.05;
+        float lineWidth = 0.002;
+
+        vec3 color = vec3(0.0);
+        for(int j = 0; j < 3; j++){
+          for(int i=0; i < 5; i++){
+            color[j] += lineWidth*float(i*i) / abs(fract(t - 0.01*float(j)+float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y, 0.2));
+          }
+        }
+        
+        gl_FragColor = vec4(color[0],color[1],color[2],1.0);
+      }
+    `
+
+    // Initialize Three.js scene
+    const camera = new THREE.Camera()
+    camera.position.z = 1
+
+    const scene = new THREE.Scene()
+    const geometry = new THREE.PlaneGeometry(2, 2)
+
+    const uniforms = {
+      time: { type: "f", value: 1.0 },
+      resolution: { type: "v2", value: new THREE.Vector2() },
     }
-}
 
-interface WavesProps {
-    className?: string
-    strokeColor?: string
-    backgroundColor?: string
-    pointerSize?: number
-}
-
-export function Waves({
-    className = "",
-    strokeColor = "#ffffff",
-    backgroundColor = "#000000",
-    pointerSize = 0.5
-}: WavesProps) {
-    const containerRef = useRef<HTMLDivElement>(null)
-    const svgRef = useRef<SVGSVGElement>(null)
-    const mouseRef = useRef({
-        x: -10,
-        y: 0,
-        lx: 0,
-        ly: 0,
-        sx: 0,
-        sy: 0,
-        v: 0,
-        vs: 0,
-        a: 0,
-        set: false,
-        scrollY: 0,
-        scrollVelocity: 0,
-        lastScrollTime: 0,
+    const material = new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
     })
-    const pathsRef = useRef<SVGPathElement[]>([])
-    const linesRef = useRef<Point[][]>([])
-    const noiseRef = useRef<((x: number, y: number) => number) | null>(null)
-    const rafRef = useRef<number | null>(null)
-    const boundingRef = useRef<DOMRect | null>(null)
 
-    // Initialization
-    useEffect(() => {
-        if (!containerRef.current || !svgRef.current) return
+    const mesh = new THREE.Mesh(geometry, material)
+    scene.add(mesh)
 
-        noiseRef.current = createNoise2D()
-        mouseRef.current.scrollY = window.scrollY
+    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    renderer.setPixelRatio(window.devicePixelRatio)
 
-        setSize()
-        setLines()
+    container.appendChild(renderer.domElement)
 
-        window.addEventListener('resize', onResize)
-        window.addEventListener('mousemove', onMouseMove)
-        window.addEventListener('scroll', onScroll, { passive: true })
-        containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
-
-        rafRef.current = requestAnimationFrame(tick)
-
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
-            window.removeEventListener('resize', onResize)
-            window.removeEventListener('mousemove', onMouseMove)
-            window.removeEventListener('scroll', onScroll)
-            containerRef.current?.removeEventListener('touchmove', onTouchMove)
-        }
-    }, [])
-
-    const setSize = () => {
-        if (!containerRef.current || !svgRef.current) return
-
-        // Get full page dimensions
-        const width = Math.max(document.documentElement.scrollWidth, window.innerWidth)
-        const height = Math.max(document.documentElement.scrollHeight, window.innerHeight, document.body.scrollHeight)
-
-        boundingRef.current = { 
-            width, 
-            height, 
-            top: 0, 
-            left: 0, 
-            right: width, 
-            bottom: height,
-            x: 0,
-            y: 0,
-            toJSON: () => ({})
-        } as DOMRect
-
-        svgRef.current.style.width = `${width}px`
-        svgRef.current.style.height = `${height}px`
+    // Handle window resize
+    const onWindowResize = () => {
+      const width = container.clientWidth
+      const height = container.clientHeight
+      renderer.setSize(width, height)
+      uniforms.resolution.value.x = renderer.domElement.width
+      uniforms.resolution.value.y = renderer.domElement.height
     }
 
-    const setLines = () => {
-        if (!svgRef.current || !boundingRef.current) return
+    // Initial resize
+    onWindowResize()
+    window.addEventListener("resize", onWindowResize, false)
 
-        const { width, height } = boundingRef.current
-        linesRef.current = []
+    // Animation loop
+    const animate = () => {
+      const animationId = requestAnimationFrame(animate)
+      uniforms.time.value += 0.05
+      renderer.render(scene, camera)
 
-        pathsRef.current.forEach(path => {
-            path.remove()
-        })
-        pathsRef.current = []
-
-        const xGap = 10
-        const yGap = 10
-
-        const oWidth = width + 200
-        const oHeight = height + 200
-
-        const totalLines = Math.ceil(oWidth / xGap)
-        const totalPoints = Math.ceil(oHeight / yGap)
-
-        const xStart = (width - xGap * totalLines) / 2
-        const yStart = (height - yGap * totalPoints) / 2
-
-        for (let i = 0; i < totalLines; i++) {
-            const points: Point[] = []
-
-            for (let j = 0; j < totalPoints; j++) {
-                const point: Point = {
-                    x: xStart + xGap * i,
-                    y: yStart + yGap * j,
-                    wave: { x: 0, y: 0 },
-                    cursor: { x: 0, y: 0, vx: 0, vy: 0 },
-                }
-
-                points.push(point)
-            }
-
-            const path = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            )
-            path.classList.add('a__line')
-            path.classList.add('js-line')
-            path.setAttribute('fill', 'none')
-            path.setAttribute('stroke', strokeColor)
-            path.setAttribute('stroke-width', '1')
-            path.setAttribute('opacity', '0.7')
-
-            svgRef.current.appendChild(path)
-            pathsRef.current.push(path)
-
-            linesRef.current.push(points)
-        }
+      if (sceneRef.current) {
+        sceneRef.current.animationId = animationId
+      }
     }
 
-    const onResize = () => {
-        setSize()
-        setLines()
+    // Store scene references for cleanup
+    sceneRef.current = {
+      camera,
+      scene,
+      renderer,
+      uniforms,
+      animationId: 0,
     }
 
-    const onMouseMove = (e: MouseEvent) => {
-        updateMousePosition(e.pageX, e.pageY)
-    }
+    // Start animation
+    animate()
 
-    const onScroll = () => {
-        const mouse = mouseRef.current
-        const currentScrollY = window.scrollY
-        const currentTime = Date.now()
-        const timeDelta = currentTime - mouse.lastScrollTime || 16
-        
-        const scrollDelta = currentScrollY - mouse.scrollY
-        mouse.scrollVelocity = (scrollDelta / timeDelta) * 30
-        mouse.scrollY = currentScrollY
-        mouse.lastScrollTime = currentTime
-        
-        mouse.vs = Math.min(80, Math.abs(mouse.scrollVelocity) * 1.2)
-    }
+    // Cleanup function
+    return () => {
+      window.removeEventListener("resize", onWindowResize)
 
-    const onTouchMove = (e: TouchEvent) => {
-        e.preventDefault()
-        const touch = e.touches[0]
-        updateMousePosition(touch.clientX, touch.clientY + window.scrollY)
-    }
+      if (sceneRef.current) {
+        cancelAnimationFrame(sceneRef.current.animationId)
 
-    const updateMousePosition = (x: number, y: number) => {
-        if (!boundingRef.current) return
-
-        const mouse = mouseRef.current
-        mouse.x = x
-        mouse.y = y
-
-        if (!mouse.set) {
-            mouse.sx = mouse.x
-            mouse.sy = mouse.y
-            mouse.lx = mouse.x
-            mouse.ly = mouse.y
-
-            mouse.set = true
+        if (container && sceneRef.current.renderer.domElement) {
+          container.removeChild(sceneRef.current.renderer.domElement)
         }
 
-        if (containerRef.current) {
-            containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
-            containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
-        }
+        sceneRef.current.renderer.dispose()
+        geometry.dispose()
+        material.dispose()
+      }
     }
+  }, [])
 
-    const movePoints = (time: number) => {
-        const { current: lines } = linesRef
-        const { current: mouse } = mouseRef
-        const { current: noise } = noiseRef
-
-        if (!noise) return
-
-        lines.forEach((points) => {
-            points.forEach((p: Point) => {
-                const scrollInfluence = mouse.scrollVelocity * 0.01
-                const scrollOffset = mouse.scrollY * 0.0005
-                
-                const move = noise(
-                    (p.x + time * 0.004) * 0.003,
-                    (p.y + time * 0.002 + scrollOffset) * 0.002
-                ) * (4 + Math.abs(scrollInfluence) * 0.5)
-
-                p.wave.x = Math.cos(move + scrollOffset) * (5 + Math.abs(scrollInfluence) * 0.8)
-                p.wave.y = Math.sin(move + scrollOffset) * (3 + Math.abs(scrollInfluence) * 0.5) + scrollInfluence * 1.5
-
-                const dx = p.x - mouse.sx
-                const dy = p.y - mouse.sy
-                const d = Math.hypot(dx, dy)
-                const l = Math.max(120, mouse.vs)
-
-                if (d < l) {
-                    const s = 1 - d / l
-                    const f = Math.cos(d * 0.001) * s
-
-                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00015
-                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00015
-                }
-
-                p.cursor.vy += mouse.scrollVelocity * 0.0006
-
-                p.cursor.vx += (0 - p.cursor.x) * 0.025
-                p.cursor.vy += (0 - p.cursor.y) * 0.025
-
-                p.cursor.vx *= 0.96
-                p.cursor.vy *= 0.96
-
-                p.cursor.x += p.cursor.vx
-                p.cursor.y += p.cursor.vy
-
-                p.cursor.x = Math.min(35, Math.max(-35, p.cursor.x))
-                p.cursor.y = Math.min(35, Math.max(-35, p.cursor.y))
-            })
-        })
-        
-        mouse.scrollVelocity *= 0.94
-    }
-
-    const moved = (point: Point, withCursorForce = true) => {
-        const coords = {
-            x: point.x + point.wave.x + (withCursorForce ? point.cursor.x : 0),
-            y: point.y + point.wave.y + (withCursorForce ? point.cursor.y : 0),
-        }
-
-        return coords
-    }
-
-    const drawLines = () => {
-        const { current: lines } = linesRef
-        const { current: paths } = pathsRef
-
-        lines.forEach((points, lIndex) => {
-            if (points.length < 2 || !paths[lIndex]) return;
-
-            const firstPoint = moved(points[0], false)
-            let d = `M ${firstPoint.x} ${firstPoint.y}`
-
-            for (let i = 1; i < points.length; i++) {
-                const current = moved(points[i])
-                d += `L ${current.x} ${current.y}`
-            }
-
-            paths[lIndex].setAttribute('d', d)
-        })
-    }
-
-    const tick = (time: number) => {
-        const { current: mouse } = mouseRef
-
-        mouse.sx += (mouse.x - mouse.sx) * 0.1
-        mouse.sy += (mouse.y - mouse.sy) * 0.1
-
-        const dx = mouse.x - mouse.lx
-        const dy = mouse.y - mouse.ly
-        const d = Math.hypot(dx, dy)
-
-        mouse.v = d
-        mouse.vs += (d - mouse.vs) * 0.1
-        mouse.vs = Math.min(100, mouse.vs)
-
-        mouse.lx = mouse.x
-        mouse.ly = mouse.y
-
-        mouse.a = Math.atan2(dy, dx)
-
-        if (containerRef.current) {
-            containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
-            containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
-        }
-
-        movePoints(time)
-        drawLines()
-
-        rafRef.current = requestAnimationFrame(tick)
-    }
-
-    return (
-        <div
-            ref={containerRef}
-            className={`waves-component ${className}`}
-            style={{
-                backgroundColor,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                minHeight: '100vh',
-                margin: 0,
-                padding: 0,
-                overflow: 'hidden',
-                '--x': '-0.5rem',
-                '--y': '50%',
-            } as React.CSSProperties}
-        >
-            <svg
-                ref={svgRef}
-                className="block w-full h-full js-svg"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                }}
-            />
-            <div
-                className="pointer-dot"
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: `${pointerSize}rem`,
-                    height: `${pointerSize}rem`,
-                    background: strokeColor,
-                    borderRadius: '50%',
-                    transform: 'translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)',
-                    willChange: 'transform',
-                    display: pointerSize > 0 ? 'block' : 'none',
-                }}
-            />
-        </div>
-    )
+  return (
+    <div
+      ref={containerRef}
+      className="w-full h-screen"
+      style={{
+        background: "#000",
+        overflow: "hidden",
+      }}
+    />
+  )
 }
